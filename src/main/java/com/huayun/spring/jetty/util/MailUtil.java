@@ -111,7 +111,7 @@ public class MailUtil {
 		// String mailFrom = "zjtesthuayun@163.com";
 		// String mailPassword = "zj19901225";
 		
-		boolean ssl = true;
+		boolean ssl = false;
 		String serverPort = "25";
 		String[] mailTo = new String[] { "zhongjun@chinacloud.com.cn" };
 		String title = "告警信息666";

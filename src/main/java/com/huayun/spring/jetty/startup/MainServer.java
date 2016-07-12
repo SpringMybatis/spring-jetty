@@ -49,15 +49,13 @@ public class MainServer {
 	/**
 	 * 创建Server
 	 * 
-	 * @param host
-	 * @param port
-	 * @param context
-	 * @param webappPath
+	 * @param host         主机的地址
+	 * @param port         端口号
+	 * @param context      项目App名称
+	 * @param webappPath   webApp的路劲位置(即就是war包路劲)
 	 * @return
 	 */
 	public static Server createServer(String host, String port, String context,String webappPath) {
-		// use Eclipse JDT compiler
-		System.setProperty("org.apache.jasper.compiler.disablejsr199", "true");
 		// 创建Server
 		Server server = new Server();
 		// 设置在JVM退出时关闭Jetty
@@ -65,28 +63,22 @@ public class MainServer {
 		// webContext
 		WebAppContext webContext = new WebAppContext(webappPath, context);
 		webContext.setServer(server);
-		// webContext.setDescriptor("src/main/webapp/WEB-INF/web.xml");
 		// 设置webapp的位置
 		webContext.setResourceBase(webappPath);
-		webContext.setClassLoader(Thread.currentThread().getContextClassLoader());
-
 		// 设置work dir,war包将解压到该目录，jsp编译后的文件也将放入其中。
 		ProtectionDomain protectionDomain = MainServer.class.getProtectionDomain();
 		URL location = protectionDomain.getCodeSource().getLocation();
 		String currentDir = new File(location.getPath()).getParent();
 		File workDir = new File(currentDir, "work");
 		webContext.setTempDirectory(workDir);
-
 		//
 		server.setHandler(webContext);
-
 		// 这是http的连接器
 		ServerConnector connector = new ServerConnector(server);
 		connector.setPort(NumberUtils.toInt(port));
 		// 解决Windows下重复启动Jetty居然不报告端口冲突的问题.
 		connector.setReuseAddress(false);
 		server.setConnectors(new Connector[] { connector });
-
 		return server;
 	}
 
